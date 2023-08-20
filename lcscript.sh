@@ -10,7 +10,7 @@ number="$1"
 cpp_filename="${number}.cpp"
 py_filename="${number}.py"
 
-touch "$cpp_filename"
+touch "$py_filename"
 cp template_lc.cpp "$cpp_filename"
 
 echo "Created files: $cpp_filename and $py_filename"
