@@ -22,7 +22,7 @@ class TimeMap:
                 l = m + 1
             else:
                 return nums[m][1]
-        while l > 0 and nums[l][0] > timestamp:
+        while l > -1 and nums[l][0] > timestamp:
             l -= 1
         if nums[l][0] > timestamp:
             return ""
