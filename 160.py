@@ -38,7 +38,7 @@ class Solution:
         else:
             headB = self.move_k_spots(headB, abs(diff))
         while headA and headB:
-            if headA.val == headB.val:
+            if headA == headB:
                 return headA
             headA = headA.next
             headB = headB.next
