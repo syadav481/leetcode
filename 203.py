@@ -1,3 +1,9 @@
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, val=0, next=None):
@@ -5,18 +11,20 @@
 #         self.next = next
 class Solution:
     def removeElements(self, head: Optional[ListNode], val: int) -> Optional[ListNode]:
-        if not head: 
+        if not head:
             return head
-        if not head.next: 
-            return head if head.val != val else None
-        ans = head 
-        prev = head 
-        nxt = head.next 
-        while nxt: 
-            if nxt.val == val: 
-                prev.next = nxt.next 
-                if prev.next: 
-                    nxt = prev.next.next 
-            prev = prev.next
-            nxt = nxt.next
-        return ans 
+        while head and head.val == val:
+            head = head.next
+        curr = head
+        ret_val = curr
+        if not curr:
+            return curr
+        next = curr.next
+        while curr and next:
+            if next.val == val:
+                curr.next = next.next
+                next = next.next
+            else:
+                curr = curr.next
+                next = next.next
+        return ret_val
