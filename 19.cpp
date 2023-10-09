@@ -26,7 +26,31 @@ struct ListNode {
  * };
  */
 class Solution {
+  void printList(ListNode *curr) {
+    while (curr) {
+      cout << curr->val << ", ";
+      curr = curr->next;
+    }
+    cout << endl;
+  }
+
 public:
-  ListNode *removeNthFromEnd(ListNode *head, int n) {}
+  ListNode *removeNthFromEnd(ListNode *head, int n) {
+    ListNode *s = new ListNode(0, head);
+    ListNode *f = head;
+    while (f && n) {
+      f = f->next;
+      n -= 1;
+    }
+    if (!f) {
+      return head->next;
+    }
+    while (f) {
+      f = f->next;
+      s = s->next;
+    }
+    s->next = s->next->next;
+    return head;
+  }
 };
 int main() {}
