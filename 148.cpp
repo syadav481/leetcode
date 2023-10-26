@@ -1,5 +1,6 @@
-#include <utility>
-using std::pair;
+#include <iostream>
+using std::cout;
+using std::ostream;
 
 struct ListNode
 {
@@ -15,76 +16,95 @@ struct ListNode
     {
     }
 };
-
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode() : val(0), next(nullptr) {}
- *     ListNode(int x) : val(x), next(nullptr) {}
- *     ListNode(int x, ListNode *next) : val(x), next(next) {}
- * };
- */
+ostream &operator<<(ostream &os, ListNode *l)
+{
+    ListNode *curr = l;
+    while (curr)
+    {
+        os << curr->val << " ";
+        curr = curr->next;
+    }
+    os << "\n";
+    return os;
+}
 class Solution
 {
-    ListNode *merge(ListNode *l1, ListNode *l2)
+  public:
+    ListNode *sortList(ListNode *head)
     {
-        auto dummy = new ListNode(0);
-        auto head = dummy;
-        while (l1 && l2)
+        return mergesort(head);
+    }
+    struct Pair
+    {
+        ListNode *u;
+        ListNode *v;
+    };
+    ListNode *mergesort(ListNode *head)
+    {
+        if (!head || !head->next)
         {
-            if (l1->val < l2->val)
-            {
-                head->next = l1;
-                l1 = l1->next;
-            }
-            else
-            {
-                head->next = l2;
-                l2 = l2->next;
-            }
-            head = head->next;
+            return head;
         }
-        if (l1)
+        cout << "presplit:\t" << head;
+        Pair p = split(head);
+        cout << "split l1:\t" << p.u;
+        cout << "split l2:\t" << p.v;
+        auto u = mergesort(p.u);
+        auto v = mergesort(p.v);
+        return merge(u, v);
+    }
+    ListNode *merge(ListNode *u, ListNode *v)
+    {
+        ListNode *dummy = new ListNode();
+        ListNode *curr = dummy;
+        while (u || v)
         {
-            head->next = l1;
-        }
-        else if (l2)
-        {
-            head->next = l2;
+            ListNode *temp = nullptr;
+            if (u && v)
+            {
+                if (u->val < v->val)
+                {
+                    temp = u;
+                    u = u->next;
+                }
+                else
+                {
+                    temp = v;
+                    v = v->next;
+                }
+            }
+            else if (u)
+            {
+                temp = u;
+                u = u->next;
+            }
+            else if (v)
+            {
+                temp = v;
+                v = v->next;
+            }
+            curr->next = temp;
+            curr = curr->next;
         }
         return dummy->next;
     }
-    pair<ListNode *, ListNode *> split(ListNode *head)
+    Pair split(ListNode *head)
     {
-        auto f = head;
-        auto s = head;
+        Pair p;
+        ListNode *dummy = new ListNode();
+        dummy->next = head;
+        auto f = dummy;
+        auto s = dummy;
         while (f && f->next)
         {
             f = f->next->next;
             s = s->next;
         }
-        auto otherHalf = s->next;
-        s->next = nullptr;
-        return {head, otherHalf};
-    }
-
-    ListNode *mergeSort(ListNode *head)
-    {
-        if (!head)
-        {
-            return nullptr;
-        }
-        auto pair = split(head);
-        auto l1 = mergeSort(pair.first);
-        auto l2 = mergeSort(pair.second);
-        return merge(pair.first, pair.second);
-    }
-
-  public:
-    ListNode *sortList(ListNode *head)
-    {
-        return mergeSort(head);
+        auto temp = s;
+        s = s->next;
+        temp->next = nullptr;
+        p.u = dummy->next;
+        p.v = s;
+        return p;
     }
 };
