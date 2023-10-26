@@ -1,5 +1,3 @@
-#include <algorithm>
-using std::swap;
 struct ListNode
 {
     int val;
@@ -14,6 +12,7 @@ struct ListNode
     {
     }
 };
+
 /**
  * Definition for singly-linked list.
  * struct ListNode {
@@ -27,21 +26,20 @@ struct ListNode
 class Solution
 {
   public:
-    ListNode *swapNodes(ListNode *head, int k)
+    ListNode *swapPairs(ListNode *head)
     {
-        ListNode *l = head;
-        ListNode *r = head;
-        for (int i = 0; i < k - 1; ++i)
+        auto dummy = new ListNode(100000, head);
+        auto p = dummy;
+        auto c = head;
+        while (c && c->next)
         {
-            r = r->next;
+            auto n = c->next;
+            p->next = c->next;
+            c->next = c->next->next;
+            n->next = c;
+            p = c;
+            c = c->next;
         }
-        ListNode *x = r;
-        while (r->next)
-        {
-            r = r->next;
-            l = l->next;
-        }
-        swap(l->val, x->val);
-        return head;
+        return dummy->next;
     }
 };
