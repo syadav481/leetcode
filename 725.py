@@ -6,30 +6,24 @@
 
 class Solution:
     def splitListToParts(self, head: Optional[ListNode], k: int) -> List[Optional[ListNode]]:
-        n = 0 
-        curr = head
+        n, curr = 0, head 
         while curr: 
+            curr = curr.next 
             n += 1
-            curr = curr.next
+        remainder = n % k 
         group_size = n // k
-        remainder = n % k
-        curr_group_size = 0
-        prev = head
-        curr = head
-        ans = []
-        for _ in range(k): 
-            if remainder > 0: 
-                curr_group_size = group_size + 1
-            else: 
-                curr_group_size = group_size
-            if curr:
-                for _ in range(curr_group_size): 
-                    curr = curr.next
-                nxt = curr.next 
-                curr.next = None
-                curr = nxt
-                ans.append(prev) 
-                prev = curr
-            else: 
-                ans.append(None)
+        # each group has n // k elements. 
+        # if there is a remainder, add 1 elt to each group. 
+        ans = [] 
+        curr = head 
+        for i in range(k): 
+            head = curr 
+            curr_group_size = group_size + (i < remainder) - 1
+            for j in range(curr_group_size): 
+                if curr: 
+                    curr = curr.next 
+            if curr: 
+                curr.next, curr = None, curr.next 
+            ans.append(head)
         return ans
+            
